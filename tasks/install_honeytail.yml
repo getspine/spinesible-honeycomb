@@ -1,0 +1,16 @@
+---
+- name: Ensure that honeytail is installed (Ubuntu/Debian)
+  apt:
+    name: "{{ honeycomb_honeytail_apt_url }}"
+    state: present
+  notify:
+    - Restart honeytail
+  when: ansible_os_family == "Debian"
+
+- name: Ensure that honeytail is installed (EL/Fedora)
+  yum:
+    name: "{{ honeycomb_honeytail_yum_url }}"
+    state: present
+  notify:
+    - Restart honeytail
+  when: ansible_os_family == "RedHat"

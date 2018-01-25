@@ -1,0 +1,17 @@
+# Configures the honeycloudfront metrics collection daemon.
+# {{ ansible_managed }}
+
+[Unit]
+Description=Honeycomb CloudFront Agent
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStart=/usr/bin/honeycloudfront --writekey={{ honeycomb_write_key }} --statedir /var/lib/honeycloudfront ingest
+KillMode=process
+Restart=on-failure
+User=honeycomb
+Group=honeycomb
+
+[Install]
+Alias=honeycloudfront honeycloudfront.service

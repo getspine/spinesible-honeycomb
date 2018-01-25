@@ -1,0 +1,9 @@
+---
+galaxy_info:
+  author: Steve Salevan <steve@spi.ne>
+  description: Installs and configures the Honeycomb metrics service
+  license: Apache 2
+  min_ansible_version: 2.0
+  categories:
+    - cloud
+    - system

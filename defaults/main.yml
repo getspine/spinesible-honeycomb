@@ -1,0 +1,53 @@
+---
+honeycomb_write_key: changeme
+
+honeycomb_install: yes
+
+honeycomb_agents:
+  - honeytail
+
+honeycomb_honeyaws_services:
+  - honeycloudfront
+  - honeyelb
+
+honeycomb_honeyaws_state_dirs:
+  - /var/lib/honeycloudfront
+  - /var/lib/honeyelb
+
+honeycomb_honeytail_sample_rate: 1
+honeycomb_honeytail_num_senders: 80
+honeycomb_honeytail_batch_frequency_ms: 100
+honeycomb_honeytail_batch_size: 50
+honeycomb_honeytail_backfill: no
+honeycomb_honeytail_back_off: no
+
+honeycomb_honeytail_add_fields: []
+honeycomb_honeytail_drop_fields: []
+
+honeycomb_honeytail_nginx_config_file: /etc/nginx/nginx.conf
+honeycomb_honeytail_nginx_log_format_name: main
+
+honeycomb_honeytail_parser: changeme
+honeycomb_honeytail_log_files: []
+honeycomb_honeytail_dataset: changeme
+
+honeycomb_honeytail_version: 1.584
+honeycomb_honeytail_epoch: 1
+
+honeycomb_honeytail_apt_url: "https://honeycomb.io/download/honeytail/linux/honeytail_{{ honeycomb_honeytail_version }}_amd64.deb"
+honeycomb_honeytail_yum_url: "https://honeycomb.io/download/honeytail/linux/honeytail-{{ honeycomb_honeytail_version }}-{{ honeycomb_honeytail_epoch }}.x86_64.rpm"
+
+honeycomb_honeyaws_version: 1.154
+honeycomb_honeyaws_epoch: 1
+
+honeycomb_honeyaws_apt_url: "https://honeycomb.io/download/honeyaws/honeyaws_{{ honeycomb_honeyaws_version }}_amd64.deb"
+honeycomb_honeyaws_yum_url: "https://honeycomb.io/download/honeyaws/honeyaws-{{ honeycomb_honeyaws_version }}-{{ honeycomb_honeyaws_epoch }}.x86_64.rpm"
+
+honeycomb_honeyaws_elbs: []
+
+honeycomb_honeyaws_set_region_env: yes
+
+honeycomb_honeyaws_apply_iam: no
+honeycomb_honeyaws_iam_name: changeme
+honeycomb_honeyaws_iam_type: role
+honeycomb_honeyaws_iam_policy_name: Honeyaws

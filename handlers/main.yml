@@ -1,0 +1,25 @@
+---
+- name: Restart honeytail
+  service:
+    name: honeytail
+    state: restarted
+
+- name: Reload systemd and restart honeyelb
+  command: systemctl daemon-reload
+  notify:
+    - Restart honeyelb
+
+- name: Restart honeyelb
+  service:
+    name: honeyelb
+    state: restarted
+
+- name: Reload systemd and restart honeycloudfront
+  command: systemctl daemon-reload
+  notify:
+    - Restart honeycloudfront
+
+- name: Restart honeycloudfront
+  service:
+    name: honeycloudfront
+    state: restarted

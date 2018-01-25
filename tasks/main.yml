@@ -1,0 +1,24 @@
+---
+- include: install_honeytail.yml
+  when: "honeycomb_install and 'honeytail' in honeycomb_agents"
+  tags:
+    - honeycomb
+    - honeycomb_install
+
+- include: config_honeytail.yml
+  when: "'honeytail' in honeycomb_agents"
+  tags:
+    - honeycomb
+    - honeycomb_config
+
+- include: install_honeyaws.yml
+  when: "honeycomb_install and 'honeyaws' in honeycomb_agents"
+  tags:
+    - honeycomb
+    - honeycomb_install
+
+- include: config_honeyaws.yml
+  when: "'honeyaws' in honeycomb_agents"
+  tags:
+    - honeycomb
+    - honeycomb_config

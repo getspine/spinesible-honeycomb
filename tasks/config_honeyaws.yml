@@ -1,0 +1,56 @@
+---
+- name: Obtain the AWS instance's current region
+  command: curl http://169.254.169.254/latest/dynamic/instance-identity/document
+  register: honeycomb_aws_metadata_output
+  when: honeycomb_honeyaws_set_region_env
+
+- name: Parse the AWS instance's metadata
+  set_fact:
+    honeycomb_honeyaws_metadata: "{{ honeycomb_aws_metadata_output.stdout | from_json }}"
+
+- name: Set AWS_REGION variable in /etc/environment
+  lineinfile:
+    dest: /etc/environment
+    regexp: '^AWS_REGION='
+    line: "AWS_REGION={{ honeycomb_honeyaws_metadata.region }}"
+    state: present
+  when: honeycomb_honeyaws_set_region_env
+
+- name: Ensure that the honeyelb systemd service is templated
+  template:
+    src: honeyelb.service.j2
+    dest: /usr/lib/systemd/system/honeyelb.service
+  when: "'honeyelb' in honeycomb_honeyaws_services"
+  notify:
+    - Reload systemd and restart honeyelb
+
+- name: Ensure that the honeycloudfront systemd service is templated
+  template:
+    src: honeycloudfront.service.j2
+    dest: /usr/lib/systemd/system/honeycloudfront.service
+  when: "'honeycloudfront' in honeycomb_honeyaws_services"
+  notify:
+    - Reload systemd and restart honeycloudfront
+
+- name: Create and apply the honeyaws IAM policy
+  local_action:
+    module: iam_policy
+    iam_type: "{{ honeycomb_honeyaws_iam_type }}"
+    iam_name: "{{ honeycomb_honeyaws_iam_name }}"
+    policy_name: "{{ honeycomb_honeyaws_iam_policy_name }}"
+    policy_json: "{{ lookup('template', 'honeyaws.policy.json.j2') }}"
+    state: present
+  become: no
+  when: honeycomb_honeyaws_apply_iam
+
+- name: Ensure that the honeyelb service is running
+  service:
+    name: honeyelb
+    state: started
+  when: "'honeyelb' in honeycomb_honeyaws_services"
+
+- name: Ensure that the honeycloudfront service is running
+  service:
+    name: honeycloudfront
+    state: started
+  when: "'honeycloudfront' in honeycomb_honeyaws_services"

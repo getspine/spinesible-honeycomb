@@ -1,0 +1,18 @@
+# Configures the honeyelb metrics collection daemon.
+# {{ ansible_managed }}
+
+[Unit]
+Description=Honeycomb ELB Agent
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/environment
+ExecStart=/usr/bin/honeyelb --writekey={{ honeycomb_write_key }} --statedir /var/lib/honeyelb ingest {% for elb in honeycomb_honeyaws_elbs %}{{ elb }}{% endfor %}
+
+KillMode=process
+Restart=on-failure
+User=honeycomb
+Group=honeycomb
+
+[Install]
+Alias=honeyelb honeyelb.service

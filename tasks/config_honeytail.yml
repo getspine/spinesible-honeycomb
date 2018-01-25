@@ -1,0 +1,12 @@
+---
+- name: Ensure that honeytail.conf is templated
+  template:
+    src: honeytail.conf.j2
+    dest: /etc/honeytail/honeytail.conf
+  notify:
+    - Restart honeytail
+
+- name: Ensure that the honeytail service is running
+  service:
+    name: honeytail
+    state: started

@@ -1,0 +1,25 @@
+---
+- name: Ensure that honeyaws is installed (Ubuntu/Debian)
+  apt:
+    name: "{{ honeycomb_honeyaws_apt_url }}"
+    state: present
+  notify:
+    - Restart honeyelb
+  when: ansible_os_family == "Debian"
+
+- name: Ensure that honeyaws is installed (EL/Fedora)
+  yum:
+    name: "{{ honeycomb_honeyaws_yum_url }}"
+    state: present
+  notify:
+    - Restart honeyelb
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure that all honeyaws state dirs exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: honeycomb
+    group: honeycomb
+    mode: 0755
+  with_items: "{{ honeycomb_honeyaws_state_dirs }}"
